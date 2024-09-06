@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora - Pre Espol</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0D1B2A;
+            color: #E0E1DD;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            background: #1B263B;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            font-size: 26px;
+            color: #A9BCD0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #A9BCD0;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #4A6572;
+            border-radius: 8px;
+            background-color: #2E3B4E;
+            color: #E0E1DD;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2E3B4E;
+            color: #E0E1DD;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #1B9AAA;
+            transform: scale(1.05);
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 18px;
+            color: #A9BCD0;
+        }
+
+        .rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .rain-drop {
+            position: absolute;
+            background-color: #8FAADC;
+            width: 2px;
+            height: 20px;
+            animation: fall 1s infinite linear;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        .fireworks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .firework {
+            position: absolute;
+            background-color: #FFC700;
+            border-radius: 50%;
+            width: 5px;
+            height: 5px;
+            animation: explode 0.7s ease-out forwards;
+        }
+
+        @keyframes explode {
+            to {
+                transform: scale(20);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora</h1>
+        <div class="form-group">
+            <label for="leccionGeneral">Lección General (20%)</label>
+            <input type="number" id="leccionGeneral" min="0" max="10" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="cl">Controles de Lectura (5%)</label>
+            <input type="number" id="cl" min="0" max="10" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="tareas">Tareas (5%)</label>
+            <input type="number" id="tareas" min="0" max="10" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="taller">Taller (10%)</label>
+            <input type="number" id="taller" min="0" max="10" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="pruebasSalida">Pruebas de Salida (10%)</label>
+            <input type="number" id="pruebasSalida" min="0" max="10" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="examenFinal">Examen Final (50%)</label>
+            <input type="number" id="examenFinal" min="0" max="10" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="examenMejoramiento">Examen de Mejoramiento (70%)</label>
+            <input type="number" id="examenMejoramiento" min="0" max="10" step="0.1">
+        </div>
+        <button onclick="calcularNotaFinal()">Calcular Nota Final</button>
+        <div class="result" id="resultado"></div>
+    </div>
+
+    <div class="rain" id="rain"></div>
+    <div class="fireworks" id="fireworks"></div>
+
+    <script>
+        function calcularNotaFinal() {
+            let leccionGeneral = parseFloat(document.getElementById('leccionGeneral').value) || 0;
+            let cl = parseFloat(document.getElementById('cl').value) || 0;
+            let tareas = parseFloat(document.getElementById('tareas').value) || 0;
+            let taller = parseFloat(document.getElementById('taller').value) || 0;
+            let pruebasSalida = parseFloat(document.getElementById('pruebasSalida').value) || 0;
+            let examenFinal = parseFloat(document.getElementById('examenFinal').value) || 0;
+            let examenMejoramiento = parseFloat(document.getElementById('examenMejoramiento').value) || 0;
+
+            if (examenMejoramiento > leccionGeneral) {
+                leccionGeneral = examenMejoramiento;
+            }
+
+            if (examenMejoramiento > examenFinal) {
+                examenFinal = examenMejoramiento;
+            }
+
+            // Asegurarse de que los valores no pasen de 10
+            leccionGeneral = Math.min(leccionGeneral, 10);
+            cl = Math.min(cl, 10);
+            tareas = Math.min(tareas, 10);
+            taller = Math.min(taller, 10);
+            pruebasSalida = Math.min(pruebasSalida, 10);
+            examenFinal = Math.min(examenFinal, 10);
+
+            let notaFinal = (leccionGeneral * 0.20) + (cl * 0.05) + (tareas * 0.05) + (taller * 0.10) + (pruebasSalida * 0.10) + (examenFinal * 0.50);
+
+            let mensajeResultado = '';
+            if (notaFinal >= 6) {
+                mensajeResultado = 'Aprobado. Tu nota final es: ' + notaFinal.toFixed(2);
+                lanzarFuegosArtificiales();
+            } else {
+                mensajeResultado = 'Reprobado. Tu nota final es: ' + notaFinal.toFixed(2);
+                iniciarLluvia();
+            }
+
+            document.getElementById('resultado').innerText = mensajeResultado;
+        }
+
+        function iniciarLluvia() {
+            detenerAnimaciones(); // Detiene fuegos artificiales si están corriendo
+            const rainContainer = document.getElementById('rain');
+            rainContainer.innerHTML = '';
+            for (let i = 0; i < 100; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('rain-drop');
+                drop.style.left = `${Math.random() * 100}vw`;
+                drop.style.animationDuration = `${0.5 + Math.random()}s`;
+                rainContainer.appendChild(drop);
+            }
+        }
+
+        function lanzarFuegosArtificiales() {
+            detenerAnimaciones(); // Detiene la lluvia si está corriendo
+            const fireworksContainer = document.getElementById('fireworks');
+            fireworksContainer.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.classList.add('firework');
+                    firework.style.left = `${Math.random() * 100}vw`;
+                    firework.style.top = `${Math.random() * 100}vh`;
+                    fireworksContainer.appendChild(firework);
+                    setTimeout(() => firework.remove(), 1000); // Eliminar después de explotar
+                }, i * 200); // Separa las explosiones por tiempo
+            }
+        }
+
+        function detenerAnimaciones() {
+            document.getElementById('rain').innerHTML = '';
+            document.getElementById('fireworks').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
