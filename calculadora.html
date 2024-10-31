@@ -5,159 +5,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora - Pre Espol</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
         body {
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            overflow: hidden;
+            background-color: #000;
+            color: #FFF;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(270deg, #FF5733, #33FF57, #3357FF);
-            background-size: 600% 600%;
-            animation: gradientAnimation 15s ease infinite;
+            margin: 0;
+            overflow: hidden;
+            flex-direction: column;
+            position: relative;
         }
 
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Fondo animado matemático */
+        .math-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to right, #121212, #121212 10px, transparent 10px, transparent 20px
+            ),
+            repeating-linear-gradient(
+                to bottom, #121212, #121212 10px, transparent 10px, transparent 20px
+            );
+            z-index: 0;
+            opacity: 0.1;
+            animation: scroll-background 10s linear infinite;
+        }
+
+        @keyframes scroll-background {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: 50px 50px;
+            }
         }
 
         .container {
-            background: rgba(18, 18, 18, 0.9);
+            background: rgba(0, 0, 0, 0.85);
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
             width: 90%;
             max-width: 400px;
             text-align: center;
+            z-index: 1;
         }
 
         h1 {
-            margin-bottom: 25px;
             font-size: 26px;
-            color: #FFFFFF;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #BBBBBB;
+            margin-bottom: 5px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             box-sizing: border-box;
-            border: 1px solid #444444;
-            border-radius: 8px;
+            border: 1px solid #444;
+            border-radius: 5px;
             background-color: #1C1C1C;
-            color: #FFFFFF;
+            color: #FFF;
         }
 
         button {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: none;
             border-radius: 8px;
-            background-color: #333333;
-            color: #FFFFFF;
+            background-color: #333;
+            color: #FFF;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s ease;
+            transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #555555;
+            background-color: #555;
         }
 
         .result {
-            text-align: center;
-            margin-top: 25px;
+            margin-top: 20px;
             font-size: 18px;
-            color: #AAAAAA;
         }
 
         .credit {
-            margin-top: 15px;
+            margin-top: 10px;
             font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            color: #777777;
-            transition: color 0.5s;
+            color: #777;
         }
 
+        /* Tortuga animada */
         .turtle {
-            width: 24px;
-            height: 24px;
-            background-image: url('https://c.tenor.com/iVqt2gIeAXAAAAAd/tenor.gif');
-            background-size: cover;
-            animation: colorChange 2s infinite alternate;
+            position: absolute;
+            bottom: 20px;
+            left: 10%;
+            font-size: 2em;
+            animation: move-turtle 8s linear infinite;
+            z-index: 1;
         }
 
-        @keyframes colorChange {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
+        @keyframes move-turtle {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(80vw);
+            }
+            100% {
+                transform: translateX(0);
+            }
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Calculadora</h1>
-        <div class="form-group">
-            <label for="cl">Controles de Lectura (5%)</label>
-            <input type="number" id="cl" min="0" max="10" step="0.1">
-        </div>
-        <div class="form-group">
-            <label for="taller">Taller (5%)</label>
-            <input type="number" id="taller" min="0" max="10" step="0.1">
-        </div>
-        <div class="form-group">
-            <label for="tareas">Tareas (10%)</label>
-            <input type="number" id="tareas" min="0" max="10" step="0.1">
-        </div>
-        <div class="form-group">
-            <label for="pruebasSalida">Pruebas de Salida (10%)</label>
-            <input type="number" id="pruebasSalida" min="0" max="10" step="0.1">
-        </div>
-        <div class="form-group">
-            <label for="leccionGeneral">Lección General (20%)</label>
-            <input type="number" id="leccionGeneral" min="0" max="10" step="0.1">
-        </div>
-        <div class="form-group">
-            <label for="examenFinal">Examen Final (50%)</label>
-            <input type="number" id="examenFinal" min="0" max="10" step="0.1">
-        </div>
-        <div class="form-group">
-            <label for="examenMejoramiento">Examen de Mejoramiento (si aplica)</label>
-            <input type="number" id="examenMejoramiento" min="0" max="10" step="0.1">
-        </div>
-        <button onclick="calcularNotaFinal()">Calcular Nota Final</button>
-        <div id="resultado" class="result"></div>
-        <div class="credit">Made by <a href="https://open.spotify.com/user/3122tpqxlmocyfg7ge6u76syx37y" target="_blank" style="color: #777777; text-decoration: none;">@Yerson</a> <span class="turtle"></span></div>
-    </div>
-
     <script>
-        function mostrarAviso() {
-            alert("¡Bienvenido! La nota final va de 0 a 10.");
-        }
-
-        function cambiarColorTexto() {
-            const colores = ['#FF5733', '#33FF57', '#3357FF', '#F1C40F', '#9B59B6', '#1ABC9C'];
-            const colorAleatorio = colores[Math.floor(Math.random() * colores.length)];
-            document.querySelector('.credit').style.color = colorAleatorio;
-        }
+        window.onload = function() {
+            alert("Bienvenido: Recuerda que la nota está en una escala de 0 a 100 y el examen de mejoramiento puede sustituir tus notas de Lección General y/o Examen Final.");
+        };
 
         function calcularNotaFinal() {
+            // Obtener valores ingresados
             let cl = parseFloat(document.getElementById('cl').value) || 0;
             let tareas = parseFloat(document.getElementById('tareas').value) || 0;
             let taller = parseFloat(document.getElementById('taller').value) || 0;
@@ -166,46 +144,74 @@
             let examenFinal = parseFloat(document.getElementById('examenFinal').value) || 0;
             let examenMejoramiento = parseFloat(document.getElementById('examenMejoramiento').value) || 0;
 
-            // Asegurarse de que los valores no pasen de 10
-            cl = Math.min(cl, 10);
-            tareas = Math.min(tareas, 10);
-            taller = Math.min(taller, 10);
-            pruebasSalida = Math.min(pruebasSalida, 10);
-            leccionGeneral = Math.min(leccionGeneral, 10);
-            examenFinal = Math.min(examenFinal, 10);
-            examenMejoramiento = Math.min(examenMejoramiento, 10);
+            // Asegurar que los valores estén en el rango 0 a 100
+            leccionGeneral = Math.min(leccionGeneral, 100);
+            cl = Math.min(cl, 100);
+            tareas = Math.min(tareas, 100);
+            taller = Math.min(taller, 100);
+            pruebasSalida = Math.min(pruebasSalida, 100);
+            examenFinal = Math.min(examenFinal, 100);
+            examenMejoramiento = Math.min(examenMejoramiento, 100);
 
-            // Calcular la nota total
-            let notaTotal = (cl * 0.05) + (taller * 0.05) + (tareas * 0.10) +
-                            (pruebasSalida * 0.10) + (leccionGeneral * 0.20) +
-                            (examenFinal * 0.50);
-
-            // Si hay examen de mejoramiento, este reemplaza la nota de la Lección General y el Examen Final
-            if (examenMejoramiento > 0) {
-                let notaLG = leccionGeneral * 0.20;
-                let notaEF = examenFinal * 0.50;
-                
-                // Calcula la nueva nota total con el examen de mejoramiento
-                notaTotal = (cl * 0.05) + (taller * 0.05) + (tareas * 0.10) +
-                            (pruebasSalida * 0.10) +
-                            (examenMejoramiento * 0.70); // Reemplaza las dos notas
-                
-                notaTotal += (notaLG + notaEF); // Agregar las notas restantes
-
-                // La nueva nota total debe incluir el examen de mejoramiento como el 70%
-                notaTotal = (notaTotal + (examenMejoramiento * 0.30)) / 1; // Promedio ponderado
+            // Lógica de reemplazo del examen de mejoramiento
+            if (examenMejoramiento > leccionGeneral && examenMejoramiento > examenFinal) {
+                leccionGeneral = examenMejoramiento;
+                examenFinal = examenMejoramiento;
+            } else if (examenMejoramiento > leccionGeneral) {
+                leccionGeneral = examenMejoramiento;
             }
 
-            let mensajeResultado = notaTotal >= 6 
-                ? `Aprobado. Tu nota final es: ${notaTotal.toFixed(2)}` 
-                : `Reprobado. Tu nota final es: ${notaTotal.toFixed(2)}`;
+            // Calcular nota final
+            let notaFinal = (cl * 0.05) + (taller * 0.05) + (tareas * 0.10) + 
+                            (pruebasSalida * 0.10) + (leccionGeneral * 0.20) + (examenFinal * 0.50);
+
+            // Determinar si está aprobado o reprobado
+            let mensajeResultado = notaFinal >= 60 
+                ? `Aprobado. Tu nota final es: ${notaFinal.toFixed(2)}`
+                : `Reprobado. Tu nota final es: ${notaFinal.toFixed(2)}`;
 
             document.getElementById('resultado').innerText = mensajeResultado;
-            cambiarColorTexto(); // Cambiar color del texto al calcular la nota
         }
-
-        // Mostrar el aviso al cargar la página
-        mostrarAviso();
     </script>
+</head>
+<body>
+    <div class="math-background"></div>
+    <div class="container">
+        <h1>Calculadora</h1>
+        <div class="form-group">
+            <label for="cl">Controles de Lectura (5%)</label>
+            <input type="number" id="cl" min="0" max="100" step="1">
+        </div>
+        <div class="form-group">
+            <label for="taller">Taller (5%)</label>
+            <input type="number" id="taller" min="0" max="100" step="1">
+        </div>
+        <div class="form-group">
+            <label for="tareas">Tareas (10%)</label>
+            <input type="number" id="tareas" min="0" max="100" step="1">
+        </div>
+        <div class="form-group">
+            <label for="pruebasSalida">Pruebas de Salida (10%)</label>
+            <input type="number" id="pruebasSalida" min="0" max="100" step="1">
+        </div>
+        <div class="form-group">
+            <label for="leccionGeneral">Lección General (20%)</label>
+            <input type="number" id="leccionGeneral" min="0" max="100" step="1">
+        </div>
+        <div class="form-group">
+            <label for="examenFinal">Examen Final (50%)</label>
+            <input type="number" id="examenFinal" min="0" max="100" step="1">
+        </div>
+        <div class="form-group">
+            <label for="examenMejoramiento">Examen de Mejoramiento (si aplica)</label>
+            <input type="number" id="examenMejoramiento" min="0" max="100" step="1">
+        </div>
+        <button onclick="calcularNotaFinal()">Calcular Nota Final</button>
+        <div id="resultado" class="result"></div>
+        <div class="credit">Made by <a href="https://open.spotify.com/user/3122tpqxlmocyfg7ge6u76syx37y" target="_blank" style="color: #777; text-decoration: none;">@Yerson</a></div>
+    </div>
+
+    <!-- Tortuga Animada -->
+    <div class="turtle">🐢</div>
 </body>
 </html>
