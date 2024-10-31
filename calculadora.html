@@ -9,23 +9,29 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #000000;
-            color: #FFFFFF;
+            margin: 0;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            flex-direction: column;
+            background: linear-gradient(270deg, #FF5733, #33FF57, #3357FF);
+            background-size: 600% 600%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .container {
-            background: #121212;
+            background: rgba(18, 18, 18, 0.9);
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-            width: 90%; /* Cambiado de 100% a 90% */
+            width: 90%;
             max-width: 400px;
             text-align: center;
         }
@@ -86,8 +92,8 @@
             align-items: center;
             justify-content: center;
             gap: 5px;
-            color: #777777; /* Color inicial */
-            transition: color 0.5s; /* Transición suave para el color */
+            color: #777777;
+            transition: color 0.5s;
         }
 
         .turtle {
@@ -141,6 +147,10 @@
     </div>
 
     <script>
+        function mostrarAviso() {
+            alert("¡Bienvenido! La nota final va de 0 a 10.");
+        }
+
         function cambiarColorTexto() {
             const colores = ['#FF5733', '#33FF57', '#3357FF', '#F1C40F', '#9B59B6', '#1ABC9C'];
             const colorAleatorio = colores[Math.floor(Math.random() * colores.length)];
@@ -157,31 +167,45 @@
             let examenMejoramiento = parseFloat(document.getElementById('examenMejoramiento').value) || 0;
 
             // Asegurarse de que los valores no pasen de 10
-            leccionGeneral = Math.min(leccionGeneral, 10);
             cl = Math.min(cl, 10);
             tareas = Math.min(tareas, 10);
             taller = Math.min(taller, 10);
             pruebasSalida = Math.min(pruebasSalida, 10);
+            leccionGeneral = Math.min(leccionGeneral, 10);
             examenFinal = Math.min(examenFinal, 10);
             examenMejoramiento = Math.min(examenMejoramiento, 10);
 
-            let notaFinal;
-            if (examenMejoramiento > examenFinal && examenMejoramiento > leccionGeneral) {
-                // Usar examen de mejoramiento como 70% de la nota final
-                notaFinal = (cl * 0.05) + (tareas * 0.10) + (taller * 0.05) + (pruebasSalida * 0.10) + (examenMejoramiento * 0.70);
-            } else {
-                // Cálculo de la nota final con los porcentajes originales
-                notaFinal = (leccionGeneral * 0.20) + (cl * 0.05) + (tareas * 0.10) + (taller * 0.05) + (pruebasSalida * 0.10) + (examenFinal * 0.50);
+            // Calcular la nota total
+            let notaTotal = (cl * 0.05) + (taller * 0.05) + (tareas * 0.10) +
+                            (pruebasSalida * 0.10) + (leccionGeneral * 0.20) +
+                            (examenFinal * 0.50);
+
+            // Si hay examen de mejoramiento, este reemplaza la nota de la Lección General y el Examen Final
+            if (examenMejoramiento > 0) {
+                let notaLG = leccionGeneral * 0.20;
+                let notaEF = examenFinal * 0.50;
+                
+                // Calcula la nueva nota total con el examen de mejoramiento
+                notaTotal = (cl * 0.05) + (taller * 0.05) + (tareas * 0.10) +
+                            (pruebasSalida * 0.10) +
+                            (examenMejoramiento * 0.70); // Reemplaza las dos notas
+                
+                notaTotal += (notaLG + notaEF); // Agregar las notas restantes
+
+                // La nueva nota total debe incluir el examen de mejoramiento como el 70%
+                notaTotal = (notaTotal + (examenMejoramiento * 0.30)) / 1; // Promedio ponderado
             }
 
-            let mensajeResultado = notaFinal >= 6 
-                ? `Aprobado. Tu nota final es: ${notaFinal.toFixed(2)}`
-                : `Reprobado. Tu nota final es: ${notaFinal.toFixed(2)}`;
+            let mensajeResultado = notaTotal >= 6 
+                ? `Aprobado. Tu nota final es: ${notaTotal.toFixed(2)}` 
+                : `Reprobado. Tu nota final es: ${notaTotal.toFixed(2)}`;
 
             document.getElementById('resultado').innerText = mensajeResultado;
-
-            cambiarColorTexto(); // Llama a la función para cambiar el color
+            cambiarColorTexto(); // Cambiar color del texto al calcular la nota
         }
+
+        // Mostrar el aviso al cargar la página
+        mostrarAviso();
     </script>
 </body>
 </html>
