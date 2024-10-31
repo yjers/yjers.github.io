@@ -25,7 +25,7 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-            width: 100%;
+            width: 90%; /* Cambiado de 100% a 90% */
             max-width: 400px;
             text-align: center;
         }
@@ -82,7 +82,25 @@
         .credit {
             margin-top: 15px;
             font-size: 12px;
-            color: #777777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            color: #777777; /* Color inicial */
+            transition: color 0.5s; /* Transición suave para el color */
+        }
+
+        .turtle {
+            width: 24px;
+            height: 24px;
+            background-image: url('https://c.tenor.com/iVqt2gIeAXAAAAAd/tenor.gif');
+            background-size: cover;
+            animation: colorChange 2s infinite alternate;
+        }
+
+        @keyframes colorChange {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
         }
     </style>
 </head>
@@ -114,15 +132,21 @@
             <input type="number" id="examenFinal" min="0" max="10" step="0.1">
         </div>
         <div class="form-group">
-            <label for="examenMejoramiento">Examen de Mejoramiento (70%)</label>
+            <label for="examenMejoramiento">Examen de Mejoramiento (si aplica)</label>
             <input type="number" id="examenMejoramiento" min="0" max="10" step="0.1">
         </div>
         <button onclick="calcularNotaFinal()">Calcular Nota Final</button>
-        <div class="result" id="resultado"></div>
+        <div id="resultado" class="result"></div>
+        <div class="credit">Made by <a href="https://open.spotify.com/user/3122tpqxlmocyfg7ge6u76syx37y" target="_blank" style="color: #777777; text-decoration: none;">@Yerson</a> <span class="turtle"></span></div>
     </div>
-    <div class="credit">Made by Yerson</div>
 
     <script>
+        function cambiarColorTexto() {
+            const colores = ['#FF5733', '#33FF57', '#3357FF', '#F1C40F', '#9B59B6', '#1ABC9C'];
+            const colorAleatorio = colores[Math.floor(Math.random() * colores.length)];
+            document.querySelector('.credit').style.color = colorAleatorio;
+        }
+
         function calcularNotaFinal() {
             let cl = parseFloat(document.getElementById('cl').value) || 0;
             let tareas = parseFloat(document.getElementById('tareas').value) || 0;
@@ -155,6 +179,8 @@
                 : `Reprobado. Tu nota final es: ${notaFinal.toFixed(2)}`;
 
             document.getElementById('resultado').innerText = mensajeResultado;
+
+            cambiarColorTexto(); // Llama a la función para cambiar el color
         }
     </script>
 </body>
